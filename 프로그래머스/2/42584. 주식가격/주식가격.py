@@ -1,12 +1,9 @@
 def solution(prices):
-    lst = []
+    answer = [0] * len(prices)
     for i in range(len(prices)):
-        ans = 0
         for j in range(i+1, len(prices)):
-            if prices[i] <= prices[j]:
-                ans += 1
-            else:
-                ans += 1
+            answer[i] += 1          
+            if prices[j] < prices[i]:
                 break
-        lst.append(ans)
-    return lst
+
+    return answer

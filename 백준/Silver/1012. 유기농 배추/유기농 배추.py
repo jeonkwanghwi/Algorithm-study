@@ -35,6 +35,6 @@ for _ in range(int(input())):
     for x in range(width):
         for y in range(height):
             if graph[x][y] == 1:
-                DFS(x, y)
                 earthworm += 1
+                DFS(x, y)
     print(earthworm)

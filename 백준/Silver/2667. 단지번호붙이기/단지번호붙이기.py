@@ -25,7 +25,7 @@ def DFS(x, y):
             ny = y + dy[i]
             DFS(nx, ny)
         return True
-    return False
+    return True
 
 for i in range(n):
     for j in range(n):

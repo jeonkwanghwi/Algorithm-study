@@ -1,41 +1,41 @@
 n = int(input())
 graph = []
-part_house = 0 # 각 구역별로 집 개수
-all_house = [] # 전체 집 개수 list
-
-for i in range(n): # 집 정보 초기화
+for _ in range(n):
     graph.append(list(map(int, input())))
 
-# 순서대로 상, 하, 좌, 우로 이동하는 것을 의미
-dx = [0, 0, 1, -1] # x축 방향 이동
-dy = [1, -1, 0, 0] # y축 방향 이동
+visited = [[0] * n for _ in range(n)]
 
-def DFS(graph, x, y):
-    # 오류가 나는 상황을 정리한 것. 위, 아래로 움직이다가 x, y의 범위 밖으로 나가는 경우를 의미함.
-    if x < 0 or x >= n or y < 0 or y >= n:
-        return False
+dx = [0,0,1,-1]
+dy = [1,-1,0,0]
 
-    if graph[x][y] == 1: # 1인 집은 탐색 대상임
-        global part_house # 구역별 집 개수를 의미함
-        part_house += 1
-        graph[x][y] = 0 # 탐색 후, 탐색 완료의 의미로 0으로 바꿈
-        for i in range(4): # 상하좌우 4개의 방향을 체크함
-            nx = x + dx[i] # 기존의 좌표에 상하좌우를 더해줌
+total_area = 0 # 총 단지 수
+each_house = 0 # 단지별 집 개수
+tmp = []
+
+def DFS(x, y):
+    global each_house
+    if (0<=x<n and 0<=y<n) is False:
+        return
+
+    if not visited[x][y] and graph[x][y]:
+        visited[x][y] = 1
+        each_house += 1
+        for i in range(4):
+            nx = x + dx[i]
             ny = y + dy[i]
-            DFS(graph, nx, ny) # 더해준 상하좌우로 다시 탐색
-        return True # 모든 탐색이 완료됨
-    return False # 탐색이 끝나긴 했는데 0을 만나서 끝남. 즉 1로 둘러싼 경계 밖을 간 것.
+            DFS(nx, ny)
+        return True
+    return False
 
-# 모든 지점에 대해서 탐색함
 for i in range(n):
     for j in range(n):
-        if DFS(graph, i, j) == True: # 해당 노드의 상하좌우에 집이 있다면 이라는 뜻임
-            DFS(graph, i, j) # 상하좌우에 집 있으니까 방문해야지
-            all_house.append(part_house) # DFS 종료 후에 얻은 구역별 집 개수를 넣어줌
-            part_house = 0 # 다시 구역별로 집 체크하러 갈 땐 0으로 초기화
+        if graph[i][j] and not visited[i][j]:
+            DFS(i,j)
+            total_area += 1
+            tmp.append(each_house)
+            each_house = 0
 
-all_house.sort()
-
-print(len(all_house))
-for i in all_house:
-    print(i)
+tmp.sort()
+print(total_area)
+for i in range(total_area):
+    print(tmp[i])
